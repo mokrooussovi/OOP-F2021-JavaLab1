@@ -19,6 +19,7 @@ public class Main {
 
     }
 
+
     public static int getConsoleInput(String prompt, int object) {
         Scanner console = new Scanner(System.in);
         System.out.print(prompt);
