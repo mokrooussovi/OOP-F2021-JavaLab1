@@ -11,85 +11,131 @@ package ca.durhamcollege;
 
 import java.util.Scanner;
 
-public class Main
-{
-    /**
-     * This method gets a string from the console
-     * @param prompt a friendly message to show the user
-     * @param object the object type to store the console input
-     * @param <T> the generic type
-     * @return
-     */
-    public static <T> T getConsoleInput(String prompt, T object)
-    {
+public class Main {
+    public static String getConsoleInput(String prompt, String object) {
         Scanner console = new Scanner(System.in);
         System.out.print(prompt);
+        return console.nextLine();
 
-        switch (object.getClass().getSimpleName())
-        {
-            case "String":
-                return (T) console.nextLine();
-            case "Integer":
-                return (T) ((Integer) console.nextInt());
-            default:
-                return (T) console.nextLine();
-        }
+    }
+
+    public static int getConsoleInput(String prompt, int object) {
+        Scanner console = new Scanner(System.in);
+        System.out.print(prompt);
+        return ((Integer) console.nextInt());
+
     }
 
     /**
      * This function prints a generic array
+     *
      * @param log the array to print
      * @param <T> the generic type
      */
-    public static <T> void printLog(T[] log)
-    {
-        for (var line:log)
-        {
+    public static <T> void printLog(T[] log) {
+        for (var line : log) {
             System.out.println(line);
         }
     }
 
-    /**
-     * This function adds elements to a generic array
-     * @param log the array to add elements to
-     * @param <T> the generic type
-     * @throws Exception
-     */
-    public static <T> void buildLog(T[] log) throws Exception
+    public static void buildStringLog(String[] log)
     {
         int capacity = 0;
         String prompt = "";
 
-        if(log instanceof  String[])
-        {
-            capacity = Config.NUM_OF_PLAYERS;
-            prompt = "Enter Player Name: ";
-        }
-        else if (log instanceof Integer[])
-        {
-            capacity = Config.NUM_OF_PLAYERS;
-            prompt = "Enter Player Score: ";
-        }
-        else
-        {
-            throw new Exception("Exception message");
-        }
+        capacity = Config.NUM_OF_PLAYERS;
+        prompt = "Enter Player Name: ";
 
         for (int i = 0; i < capacity; i++)
         {
-            if(log instanceof  String[])
-            {
-                log[i] = (T)"";
-            }
-            else if (log instanceof Integer[])
-            {
-                log[i] = (T) new Integer(0);
-            }
+            log[i] = (String) "";
+            log[i] = (String) getConsoleInput(prompt, log[i]);
 
-            log[i] = (T) getConsoleInput(prompt, log[i]);
+            //Player player1 = new Player(log[i]);
         }
     }
 
+    public static void buildPlayerArray(Player[] players, String[] log)
+    {
+        int capacity = 0;
+        String prompt = "";
+
+        capacity = Config.NUM_OF_PLAYERS;
+        prompt = "Enter Player Name: ";
+
+        for (int i = 0; i < capacity; i++)
+        {
+            log[i] = (String) "";
+            log[i] = (String) getConsoleInput(prompt, log[i]);
+
+            players[i] = new Player(log[i]);
+        }
+    }
+
+    //*****************&&&&&&&&&&&&&&&&&&&&******************
+
+    public static void buildScoreArray(Integer[][] log)
+    {
+        String prompt = "";
+
+        for (int i = 0; i < Config.NUM_OF_GAMES; i++)
+        {
+            for (int j = 0; j < Config.NUM_OF_PLAYERS; j++)
+            {
+                prompt = "Please enter  Player score for Game # " + (i + 1) + ": ";
+                boolean isValid = true;
+                while (isValid) {
+                    log[i][j] = new Integer(0);
+                    log[i][j] = (Integer) getConsoleInput(prompt, log[i][j]);
+                    if (log[i][j] % 1 == 0) {
+                        if (log[i][j] >= Config.MINIMUM_SCORE && log[i][j] <= Config.MAXIMUM_SCORE) {
+                            isValid = false;
+                        } else {
+                            System.out.println("Invalid input. Value must be between 0 and 300. Please try again.");
+                        }
+                    } else {
+                        System.out.println("Invalid input. Value must be numeric integer");
+                    }
+                }
+            }
+        }
+    }
+
+    public static void buildIntegerLog(Integer[] log)
+    {
+        int capacity = 0;
+        String prompt = "";
+
+        capacity = Config.NUM_OF_PLAYERS;
+        prompt = "Enter Player Score: ";
+
+        for (int i = 0; i < capacity; i++)
+        {
+            boolean isValid = true;
+            while(isValid)
+            {
+                log[i] = new Integer (0);
+                log[i] = (Integer) getConsoleInput(prompt, log[i]);
+                if (log[i]%1 == 0)
+                {
+                    if (log[i] >= Config.MINIMUM_SCORE && log[i] <= Config.MAXIMUM_SCORE)
+                    {
+                        isValid = false;
+                    } else
+                    {
+                        System.out.println("Invalid input. Value must be between 0 and 300. Please try again.");
+                    }
+                }
+                else
+                {
+                    System.out.println("Invalid input. Value must be numeric integer");
+                }
+            }
+        }
+    }
+
+
+    //****************************************************************
 
     /**
      * Entry point for our application
@@ -98,22 +144,43 @@ public class Main
     public static void main(String[] args)
     {
         String[] Log = new String[Config.NUM_OF_PLAYERS];
-        Integer[] intLog = new Integer[Config.NUM_OF_GAMES_ROUND_ONE];
+        Integer[][] intLog = new Integer[Config.NUM_OF_GAMES][Config.NUM_OF_PLAYERS];
         Integer[] intLog2 = new Integer[Config.NUM_OF_GAMES_ROUND_TWO];
-
+        Player[] players = new Player[Config.NUM_OF_PLAYERS];
+        GameScore[] gameScores = new GameScore[Config.NUM_OF_PLAYERS];
         try
         {
-            buildLog(Log);
-            printLog(Log);
-            System.out.println(); // empty space
+            buildPlayerArray(players, Log);
+            buildScoreArray(intLog);
 
-            buildLog(intLog);
-            printLog(intLog);
-            System.out.println(); // empty space
+            // numbers are right
+            for (int i = 0; i < Config.NUM_OF_GAMES; i++)
+            {
+                for (int j = 0; j < Config.NUM_OF_PLAYERS; j++) {
+                    players[j].scoreDetails();
+                    System.out.println("Game # " + (i+1) + ":   " + intLog[i][j]);
+                }
+            }
+            // this display output looks how supposed to look but numbers are wrong
+            for (int i = 0; i < Config.NUM_OF_PLAYERS; i++) {
+                players[i].scoreDetails();
+                for (int j = 0; j < Config.NUM_OF_GAMES; j++) {
+                    System.out.println("Game # " + (j+1) + ":   " + intLog[i][j]);
+                }
+            }
 
-            buildLog(intLog2);
-            printLog(intLog2);
-            System.out.println(); // empty space
+
+            //buildStringLog(Log);
+            //buildIntegerLog(intLog);
+            //buildIntegerLog(intLog2);
+            //printLog(Log);
+            //System.out.println(); // empty space
+
+            //printLog(intLog);
+            //System.out.println(); // empty space
+
+            //printLog(intLog2);
+            //System.out.println(); // empty space
         }
         catch (Exception e)
         {

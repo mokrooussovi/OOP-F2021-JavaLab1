@@ -1,6 +1,6 @@
 package ca.durhamcollege;
 
-public abstract class Player
+public class Player
 {
     // instance variable
     private String m_name;
@@ -10,6 +10,7 @@ public abstract class Player
     {
         setName(name);
     }
+
     Player()
     {
         setName("Unknown");
@@ -23,6 +24,15 @@ public abstract class Player
     public void setName(String name)
     {
         m_name = name;
+    }
+
+    /**
+     * This method tests the Person class and returns a simple message to the console
+     * @return {Void}
+     */
+    public void scoreDetails()
+    {
+        System.out.println("Score Details for " + this.m_name + ":");
     }
 
 }
