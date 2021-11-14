@@ -45,7 +45,7 @@ public class Main {
 
     public static void buildScoreArray(Integer[][] log) {
         String prompt = "";
-
+        Float[] average = new Float[Config.NUM_OF_PLAYERS];
         for (int i = 0; i < Config.NUM_OF_GAMES; i++) {
             for (int j = 0; j < Config.NUM_OF_PLAYERS; j++) {
                 prompt = "Please enter  Player score for Game # " + (i + 1) + ": ";
@@ -99,6 +99,11 @@ public class Main {
         }
     }
 
+    public static void readScore(Player[] players, String[] Log, Integer[][] intLog)
+    {
+        buildPlayerArray(players, Log);
+        buildScoreArray(intLog);
+    }
 
     //****************************************************************
 
@@ -113,8 +118,10 @@ public class Main {
         Player[] players = new Player[Config.NUM_OF_PLAYERS];
 
         try {
-            buildPlayerArray(players, Log);
-            buildScoreArray(intLog);
+
+            readScore(players, Log, intLog);
+            //buildPlayerArray(players, Log);
+            //buildScoreArray(intLog);
             displayReport(players, intLog);
 
         } catch (Exception e) {
