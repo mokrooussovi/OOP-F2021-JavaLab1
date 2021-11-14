@@ -13,8 +13,15 @@ import java.util.Scanner;
 
 public class Main {
 
+    // declare float array called average with length equal to number of players
     static Float[] average = new Float[Config.NUM_OF_PLAYERS];
 
+    /**
+     * This method allows get string from the console
+     * @param prompt the message prompts to the user
+     * @param object user input
+     * @return string
+     */
     public static String getConsoleInput(String prompt, String object) {
         Scanner console = new Scanner(System.in);
         System.out.print(prompt);
@@ -22,14 +29,24 @@ public class Main {
 
     }
 
-
+    /**
+     * This method allows get integer from the console
+     * @param prompt the message send to the user
+     * @param object user input
+     * @return integer
+     */
     public static int getConsoleInput(String prompt, int object) {
         Scanner console = new Scanner(System.in);
         System.out.print(prompt);
         return ((Integer) console.nextInt());
-
     }
 
+    /**
+     * This method allows us to read the user input from console for players names
+     * and add them to the array of instances on Class Player
+     * @param players array of instances class Player
+     * @param log array type of string of user input
+     */
     public static void buildPlayerArray(Player[] players, String[] log) {
         int capacity = 0;
         String prompt = "";
@@ -45,7 +62,11 @@ public class Main {
         }
     }
 
-
+    /**
+     * This method allows us to create multi array of score different players
+     * on different game as well as calculate average these entries
+     * @param log multi array of game scores of integer type
+     */
     public static void buildScoreArray(Integer[][] log) {
         String prompt = "";
         for (int i = 0; i < Config.NUM_OF_PLAYERS; i++) {
@@ -77,6 +98,10 @@ public class Main {
         }
     }
 
+    /**
+     * This method might allow us to build array by collecting data from the console
+     * @param log array of type Integer for players on particular round of game
+     */
     public static void buildIntegerLog(Integer[] log) {
         String prompt = "";
 
@@ -99,6 +124,12 @@ public class Main {
         }
     }
 
+    /**
+     * This method allows us to display final report into the console
+     * @param players array of instances of Player class
+     * @param intLog multi array of game scores of integer type
+     * @param average array of float type on average of specific player score
+     */
     public static void displayReport(Player[] players, Integer[][] intLog, Float[] average)
     {
         for (int i = 0; i < Config.NUM_OF_PLAYERS; i++) {
@@ -111,6 +142,12 @@ public class Main {
         }
     }
 
+    /**
+     * This method allows us to read user input from console
+     * @param players array of instances of Player class
+     * @param Log array type of string of user input
+     * @param intLog multi array of game scores of integer type
+     */
     public static void readScore(Player[] players, String[] Log, Integer[][] intLog)
     {
         buildPlayerArray(players, Log);
@@ -132,14 +169,13 @@ public class Main {
         try {
 
             readScore(players, Log, intLog);
-            //buildPlayerArray(players, Log);
-            //buildScoreArray(intLog);
+            // readScore() method can substitute next two methods
+            // buildPlayerArray(players, Log);
+            // buildScoreArray(intLog);
             displayReport(players, intLog, average);
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-
-
     }
 }
