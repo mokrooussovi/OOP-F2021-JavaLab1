@@ -12,6 +12,9 @@ package ca.durhamcollege;
 import java.util.Scanner;
 
 public class Main {
+
+    static Float[] average = new Float[Config.NUM_OF_PLAYERS];
+
     public static String getConsoleInput(String prompt, String object) {
         Scanner console = new Scanner(System.in);
         System.out.print(prompt);
@@ -45,7 +48,10 @@ public class Main {
 
     public static void buildScoreArray(Integer[][] log) {
         String prompt = "";
-        Float[] average = new Float[Config.NUM_OF_PLAYERS];
+        for (int i = 0; i < Config.NUM_OF_PLAYERS; i++) {
+            average[i] = 0.0f;
+        }
+
         for (int i = 0; i < Config.NUM_OF_GAMES; i++) {
             for (int j = 0; j < Config.NUM_OF_PLAYERS; j++) {
                 prompt = "Please enter  Player score for Game # " + (i + 1) + ": ";
@@ -55,6 +61,7 @@ public class Main {
                     log[i][j] = (Integer) getConsoleInput(prompt, log[i][j]);
                     if (log[i][j] % 1 == 0) {
                         if (log[i][j] >= Config.MINIMUM_SCORE && log[i][j] <= Config.MAXIMUM_SCORE) {
+                            average[j] += log[i][j];
                             isValid = false;
                         } else {
                             System.out.println("Invalid input. Value must be between 0 and 300. Please try again.");
@@ -64,6 +71,9 @@ public class Main {
                     }
                 }
             }
+        }
+        for (int i = 0; i < Config.NUM_OF_PLAYERS; i++) {
+           average[i] = average[i]/Config.NUM_OF_GAMES;
         }
     }
 
@@ -89,13 +99,15 @@ public class Main {
         }
     }
 
-    public static void displayReport(Player[] players, Integer[][] intLog)
+    public static void displayReport(Player[] players, Integer[][] intLog, Float[] average)
     {
         for (int i = 0; i < Config.NUM_OF_PLAYERS; i++) {
             players[i].scoreDetails();
             for (int j = 0; j < Config.NUM_OF_GAMES; j++) {
                 System.out.println("Game # " + (j + 1) + ":   " + intLog[j][i]);
             }
+            players[i].averageDetails();
+            System.out.println(average[i]);
         }
     }
 
@@ -122,7 +134,7 @@ public class Main {
             readScore(players, Log, intLog);
             //buildPlayerArray(players, Log);
             //buildScoreArray(intLog);
-            displayReport(players, intLog);
+            displayReport(players, intLog, average);
 
         } catch (Exception e) {
             System.out.println(e.getMessage());

@@ -32,7 +32,12 @@ public class Player
      */
     public void scoreDetails()
     {
-        System.out.println("Score Details for " + this.m_name + ":");
+        System.out.println("Score Details for " + this.m_name + ": ");
+    }
+
+    public void averageDetails()
+    {
+        System.out.println("The Average Details for " + this.m_name + ": ");
     }
 
 }
