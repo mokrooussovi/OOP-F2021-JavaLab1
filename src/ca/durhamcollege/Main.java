@@ -9,6 +9,7 @@
 
 package ca.durhamcollege;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
@@ -35,11 +36,13 @@ public class Main {
      * @param object user input
      * @return integer
      */
-    public static int getConsoleInput(String prompt, int object) {
+     public static int getConsoleInput(String prompt, int object)
+     {
         Scanner console = new Scanner(System.in);
         System.out.print(prompt);
         return ((Integer) console.nextInt());
-    }
+     }
+
 
     /**
      * This method allows us to read the user input from console for players names
@@ -67,7 +70,7 @@ public class Main {
      * on different game as well as calculate average these entries
      * @param log multi array of game scores of integer type
      */
-    public static void buildScoreArray(Integer[][] log) {
+    public static void buildScoreArray(String[] Player, Integer[][] log) {
         String prompt = "";
         for (int i = 0; i < Config.NUM_OF_PLAYERS; i++) {
             average[i] = 0.0f;
@@ -75,20 +78,27 @@ public class Main {
 
         for (int i = 0; i < Config.NUM_OF_GAMES; i++) {
             for (int j = 0; j < Config.NUM_OF_PLAYERS; j++) {
-                prompt = "Please enter  Player score for Game # " + (i + 1) + ": ";
+                prompt = "Please enter " + Player[j] + " score for Game # " + (i + 1) + ": ";
                 boolean isValid = true;
                 while (isValid) {
                     log[i][j] = new Integer(0);
-                    log[i][j] = (Integer) getConsoleInput(prompt, log[i][j]);
-                    if (log[i][j] % 1 == 0) {
-                        if (log[i][j] >= Config.MINIMUM_SCORE && log[i][j] <= Config.MAXIMUM_SCORE) {
-                            average[j] += log[i][j];
-                            isValid = false;
+                    try {
+                        log[i][j] = (Integer) getConsoleInput(prompt, log[i][j]);
+
+                        if (log[i][j] % 1 == 0) {
+                            if (log[i][j] >= Config.MINIMUM_SCORE && log[i][j] <= Config.MAXIMUM_SCORE) {
+                                average[j] += log[i][j];
+                                isValid = false;
+                            } else {
+                                System.out.println("Invalid input. Value must be between 0 and 300. Please try again.");
+                            }
                         } else {
-                            System.out.println("Invalid input. Value must be between 0 and 300. Please try again.");
+                            System.out.println("Invalid input. Value must be numeric integer");
                         }
-                    } else {
-                        System.out.println("Invalid input. Value must be numeric integer");
+                    }
+                    catch (InputMismatchException inputMismatchException)
+                    {
+                        System.out.println("Invalid input. Value must be numeric integer.");
                     }
                 }
             }
@@ -151,7 +161,7 @@ public class Main {
     public static void readScore(Player[] players, String[] Log, Integer[][] intLog)
     {
         buildPlayerArray(players, Log);
-        buildScoreArray(intLog);
+        buildScoreArray(Log, intLog);
     }
 
     //****************************************************************
